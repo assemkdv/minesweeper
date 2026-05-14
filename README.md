@@ -57,7 +57,3 @@ This is exactly how expert humans think — the AI teaches you *how to reason*, 
 - **Pro ($3.99/mo)**: Custom themes, advanced AI, priority leaderboard, no ads
 - **Retention**: Daily streak creates daily active users
 - **SEO**: Low-competition keywords: "Minesweeper with AI", "daily Minesweeper"
-
----
-
-Built with ❤️ for probabilistic thinkers. The world needs people comfortable with uncertainty.
