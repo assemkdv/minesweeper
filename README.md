@@ -1,10 +1,6 @@
 # 💣 MinesweeperPro
 
-> The smartest Minesweeper on the web — train probabilistic thinking with AI-powered hints and daily challenges.
-
-## What is this?
-
-MinesweeperPro is a **modern Minesweeper platform** designed to be *mastered*, not just played:
+MinesweeperPro is a **modern Minesweeper platform** designed to be *mastered*:
 
 - 🤖 **AI Coach** — real-time probability overlay shows exact mine risk per cell
 - 📅 **Daily Challenge** — seeded board, same for every player worldwide
