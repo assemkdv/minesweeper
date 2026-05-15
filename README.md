@@ -2,7 +2,11 @@
 
 **Play here:** https://minesweeper-omega-ten.vercel.app/
 
-Mineko is a Minesweeper web app built for the nFactorial Incubator. It grew into a full product with an AI coach, daily challenges, a real leaderboard, accounts, and a clean mobile-friendly design.
+Mineko is a modern Minesweeper platform built for the nFactorial Incubator.
+
+Classic Minesweeper is fun but it has a problem — at some point you're just guessing. Mineko fixes that. It's built for people who want to actually get good at the game: an AI coach shows you the mine probability of every cell in real time, so every move is a decision, not a coin flip. Daily challenges give you a reason to come back every day, and a live leaderboard makes your times mean something.
+
+It's free to play, works on any device, and doesn't require an account to start.
 
 ## Features
 
