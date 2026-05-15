@@ -2,7 +2,7 @@
 
 **Live site:** https://minesweeper-omega-ten.vercel.app/
 
-Mineko is a Minesweeper web app I built from scratch. It started as a class project but I kept adding things until it became something I actually enjoy using. It has an AI coach, daily challenges, a real leaderboard connected to a database, and a clean design that works on both desktop and mobile.
+Mineko is a Minesweeper web app I built from scratch. It has an AI coach, daily challenges, a real leaderboard connected to a database, and a clean design that works on both desktop and mobile.
 
 ## What's inside
 
