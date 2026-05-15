@@ -1,6 +1,29 @@
 'use client';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import { CatMascot } from '@/components/CatMascot';
+
+function SunIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <circle cx="8" cy="8" r="3" fill="#ff85a1"/>
+      {[0,45,90,135,180,225,270,315].map(a => (
+        <line key={a}
+          x1={8 + 4.5*Math.cos(a*Math.PI/180)} y1={8 + 4.5*Math.sin(a*Math.PI/180)}
+          x2={8 + 6.5*Math.cos(a*Math.PI/180)} y2={8 + 6.5*Math.sin(a*Math.PI/180)}
+          stroke="#ff85a1" strokeWidth="1.5" strokeLinecap="round"/>
+      ))}
+    </svg>
+  );
+}
+
+function MoonIcon() {
+  return (
+    <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+      <path d="M13 9A6 6 0 016 3a6 6 0 100 10 6 6 0 007-4z" fill="#ff85a1"/>
+    </svg>
+  );
+}
 
 export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: () => void }) {
   const p = usePathname();
@@ -9,36 +32,48 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
     { href: '/daily',       label: 'Daily' },
     { href: '/leaderboard', label: 'Scores' },
   ];
-  const bg     = isDark ? '#111' : '#fff';
-  const border = isDark ? '#222' : '#ede8e0';
-  const text   = isDark ? '#f0f0f0' : '#1a1a1a';
-  const muted  = isDark ? '#777' : '#888';
-  const accent = '#e8533a';
   return (
-    <nav style={{ background: bg, borderBottom: `1px solid ${border}`, padding: '0 24px', height: 56,
+    <nav style={{
+      background: 'var(--card)', borderBottom: '1px solid var(--border)',
+      padding: '0 24px', height: 56,
       display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-      position: 'sticky', top: 0, zIndex: 50 }}>
-      <Link href="/" style={{ fontWeight: 800, fontSize: 18, color: text, textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 6 }}>
-        <span style={{ fontSize: 20 }}>💣</span> MinesweeperPro
+      position: 'sticky', top: 0, zIndex: 50,
+    }}>
+      <Link href="/" style={{
+        fontWeight: 800, fontSize: 17, color: 'var(--text)',
+        textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
+      }}>
+        <CatMascot mood="idle" size={34}/>
+        MinesweeperPro
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         {links.map(({ href, label }) => {
-          const active = p === href;
+          const active = p === href || p?.startsWith(href);
           return (
             <Link key={href} href={href} style={{
               padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 600,
               textDecoration: 'none', transition: 'all 0.15s',
-              color: active ? accent : muted,
-              background: active ? (isDark ? 'rgba(232,83,58,0.12)' : 'rgba(232,83,58,0.08)') : 'transparent',
+              color: active ? 'var(--accent)' : 'var(--muted)',
+              background: active ? 'rgba(255,77,109,0.09)' : 'transparent',
             }}>{label}</Link>
           );
         })}
+        <Link href="/signin" style={{
+          padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700,
+          textDecoration: 'none', transition: 'all 0.15s',
+          color: '#fff', background: 'var(--accent)',
+          marginLeft: 4,
+        }}>Sign in</Link>
         <button onClick={onToggleTheme} style={{
-          marginLeft: 8, width: 34, height: 34, borderRadius: 8,
-          border: `1px solid ${border}`, background: 'transparent',
-          cursor: 'pointer', fontSize: 15, transition: 'background 0.15s',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>{isDark ? '☀️' : '🌙'}</button>
+          marginLeft: 6, width: 34, height: 34, borderRadius: 8,
+          border: '1px solid var(--border)', background: 'transparent',
+          cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center',
+          transition: 'background 0.15s',
+        }}
+          onMouseEnter={e => (e.currentTarget as HTMLElement).style.background = 'var(--bg2)'}
+          onMouseLeave={e => (e.currentTarget as HTMLElement).style.background = 'transparent'}>
+          {isDark ? <SunIcon/> : <MoonIcon/>}
+        </button>
       </div>
     </nav>
   );
