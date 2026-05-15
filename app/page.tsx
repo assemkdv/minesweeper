@@ -73,14 +73,18 @@ function IconMobile() {
 
 export default function HomePage() {
   const [isDark, setIsDark] = useState(false);
-  const [stats, setStats]   = useState(() => loadStats());
+  const [mounted, setMounted] = useState(false);
+  const [stats, setStats] = useState(() => loadStats());
+
   useEffect(() => {
     const saved = localStorage.getItem('theme');
     const dark = saved === 'dark';
     setIsDark(dark);
     document.documentElement.classList.toggle('dark', dark);
     setStats(loadStats());
+    setMounted(true);
   }, []);
+
   const toggle = () => {
     const n = !isDark;
     setIsDark(n);
@@ -135,7 +139,7 @@ export default function HomePage() {
           </Link>
         </div>
 
-        {totalGames > 0 && (
+        {mounted && totalGames > 0 && (
           <div style={{ display: 'flex', gap: 40, justifyContent: 'center', marginTop: 48, flexWrap: 'wrap' }}>
             {[
               { label: 'Games Played', value: totalGames },
@@ -172,7 +176,7 @@ export default function HomePage() {
       </section>
 
       {/* Best times */}
-      {(['beginner','intermediate','expert'] as const).some(d=>stats[d].bestTime) && (
+      {mounted && (['beginner','intermediate','expert'] as const).some(d=>stats[d].bestTime) && (
         <section style={{ padding: '0 24px 56px', maxWidth: 560, margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: 20, fontWeight: 800, marginBottom: 16 }}>Your Best Times</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 10 }}>
