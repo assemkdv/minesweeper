@@ -9,11 +9,10 @@ function IconRobot() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
       <rect x="4" y="9" width="20" height="14" rx="4" fill="#ffc2d1"/>
-      <rect x="8" y="12" width="4" height="4" rx="1" fill="#ff4d6d"/>
-      <rect x="16" y="12" width="4" height="4" rx="1" fill="#ff4d6d"/>
+      <rect x="8" y="12" width="4" height="4" rx="1" fill="#c9184a"/>
+      <rect x="16" y="12" width="4" height="4" rx="1" fill="#c9184a"/>
       <rect x="11" y="17" width="6" height="2" rx="1" fill="#ff85a1"/>
       <rect x="12" y="5" width="4" height="4" rx="2" fill="#ffc2d1"/>
-      <rect x="13" y="7" width="2" height="2" fill="#ffc2d1"/>
       <rect x="1" y="13" width="3" height="6" rx="1.5" fill="#ffd6e7"/>
       <rect x="24" y="13" width="3" height="6" rx="1.5" fill="#ffd6e7"/>
     </svg>
@@ -25,11 +24,11 @@ function IconCalendar() {
       <rect x="3" y="7" width="22" height="18" rx="4" fill="#ffc2d1"/>
       <rect x="3" y="7" width="22" height="7" rx="4" fill="#ff85a1"/>
       <rect x="3" y="11" width="22" height="3" fill="#ff85a1"/>
-      <rect x="8" y="3" width="3" height="6" rx="1.5" fill="#ff4d6d"/>
-      <rect x="17" y="3" width="3" height="6" rx="1.5" fill="#ff4d6d"/>
-      <rect x="8" y="18" width="3" height="3" rx="1" fill="#ff4d6d"/>
-      <rect x="13" y="18" width="3" height="3" rx="1" fill="#ff4d6d"/>
-      <rect x="18" y="18" width="3" height="3" rx="1" fill="#ff4d6d"/>
+      <rect x="8" y="3" width="3" height="6" rx="1.5" fill="#c9184a"/>
+      <rect x="17" y="3" width="3" height="6" rx="1.5" fill="#c9184a"/>
+      <rect x="8" y="18" width="3" height="3" rx="1" fill="#c9184a"/>
+      <rect x="13" y="18" width="3" height="3" rx="1" fill="#c9184a"/>
+      <rect x="18" y="18" width="3" height="3" rx="1" fill="#c9184a"/>
     </svg>
   );
 }
@@ -40,7 +39,7 @@ function IconTrophy() {
       <path d="M4 5h4v6a2 2 0 01-4 0V5z" fill="#ffd6e7"/>
       <path d="M20 5h4v6a2 2 0 01-4 0V5z" fill="#ffd6e7"/>
       <rect x="11" y="18" width="6" height="3" fill="#ff85a1"/>
-      <rect x="8" y="21" width="12" height="3" rx="1.5" fill="#ff4d6d"/>
+      <rect x="8" y="21" width="12" height="3" rx="1.5" fill="#c9184a"/>
     </svg>
   );
 }
@@ -49,7 +48,7 @@ function IconChart() {
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
       <rect x="4" y="16" width="4" height="8" rx="2" fill="#ffc2d1"/>
       <rect x="12" y="10" width="4" height="14" rx="2" fill="#ff85a1"/>
-      <rect x="20" y="6" width="4" height="18" rx="2" fill="#ff4d6d"/>
+      <rect x="20" y="6" width="4" height="18" rx="2" fill="#c9184a"/>
     </svg>
   );
 }
@@ -57,7 +56,7 @@ function IconShield() {
   return (
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
       <path d="M14 3L5 7v8c0 5 4 9 9 10 5-1 9-5 9-10V7L14 3z" fill="#ffc2d1"/>
-      <path d="M10 13l3 3 5-5" stroke="#ff4d6d" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      <path d="M10 13l3 3 5-5" stroke="#c9184a" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
     </svg>
   );
 }
@@ -66,15 +65,15 @@ function IconMobile() {
     <svg width="28" height="28" viewBox="0 0 28 28" fill="none">
       <rect x="7" y="2" width="14" height="24" rx="3" fill="#ffc2d1"/>
       <rect x="9" y="5" width="10" height="16" rx="1" fill="white" fillOpacity="0.6"/>
-      <circle cx="14" cy="23" r="1.5" fill="#ff4d6d"/>
+      <circle cx="14" cy="23" r="1.5" fill="#c9184a"/>
     </svg>
   );
 }
 
 export default function HomePage() {
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark]   = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [stats, setStats] = useState(() => loadStats());
+  const [stats, setStats]     = useState(() => loadStats());
 
   useEffect(() => {
     const saved = localStorage.getItem('theme');
@@ -96,12 +95,12 @@ export default function HomePage() {
   const totalWins  = (['beginner','intermediate','expert'] as const).reduce((s,d)=>s+stats[d].wins,0);
 
   const features = [
-    { Icon: IconRobot,    title: 'AI Coach',         desc: 'Real-time probability overlay. Every hidden cell shows its mine risk so you never guess blindly.' },
-    { Icon: IconCalendar, title: 'Daily Challenge',   desc: 'Same board for everyone worldwide, every day. Build streaks and race the clock.' },
-    { Icon: IconTrophy,   title: 'Leaderboard',       desc: 'Compare your best times globally. See who is fastest.' },
-    { Icon: IconChart,    title: 'Deep Stats',         desc: 'Win rate, streaks, best times — all tracked locally. No sign-up needed.' },
-    { Icon: IconShield,   title: 'Always Fair',        desc: 'Mines are placed after your first click. First move is always safe, guaranteed.' },
-    { Icon: IconMobile,   title: 'Works Everywhere',   desc: 'Mobile-friendly with long-press to flag. Plays great on phone, tablet, and desktop.' },
+    { Icon: IconRobot,    title: 'AI Coach',        desc: 'Real-time probability overlay. Every hidden cell shows its mine risk so you never guess blindly.' },
+    { Icon: IconCalendar, title: 'Daily Challenge',  desc: 'Same board for everyone worldwide, every day. Build streaks and race the clock.' },
+    { Icon: IconTrophy,   title: 'Leaderboard',      desc: 'Compare your best times globally. See who is fastest.' },
+    { Icon: IconChart,    title: 'Deep Stats',        desc: 'Win rate, streaks, best times — all tracked locally. No sign-up needed.' },
+    { Icon: IconShield,   title: 'Always Fair',       desc: 'Mines are placed after your first click. First move is always safe, guaranteed.' },
+    { Icon: IconMobile,   title: 'Works Everywhere',  desc: 'Mobile-friendly with long-press to flag. Plays great on phone, tablet, and desktop.' },
   ];
 
   return (
@@ -122,9 +121,9 @@ export default function HomePage() {
         </p>
         <div style={{ display: 'flex', gap: 10, justifyContent: 'center', flexWrap: 'wrap' }}>
           <Link href="/game" style={{
-            background: 'var(--accent)', color: '#fff', padding: '13px 32px',
+            background: 'var(--btn)', color: '#fff', padding: '13px 32px',
             borderRadius: 10, fontWeight: 800, fontSize: 16, textDecoration: 'none',
-            boxShadow: '0 4px 16px rgba(255,77,109,0.35)', transition: 'transform 0.15s',
+            boxShadow: '0 4px 16px var(--btn-shadow)', transition: 'transform 0.15s',
           }}
             onMouseEnter={e=>(e.currentTarget as HTMLElement).style.transform='translateY(-2px)'}
             onMouseLeave={e=>(e.currentTarget as HTMLElement).style.transform='translateY(0)'}>
@@ -147,7 +146,7 @@ export default function HomePage() {
               { label: 'Win Rate',     value: `${totalGames ? Math.round(totalWins/totalGames*100) : 0}%` },
             ].map(({label,value}) => (
               <div key={label} style={{ textAlign: 'center' }}>
-                <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--accent)' }}>{value}</div>
+                <div style={{ fontSize: 30, fontWeight: 900, color: 'var(--btn)' }}>{value}</div>
                 <div style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 600, marginTop: 2, textTransform: 'uppercase', letterSpacing: 0.5 }}>{label}</div>
               </div>
             ))}
@@ -168,7 +167,7 @@ export default function HomePage() {
               onMouseEnter={e=>(e.currentTarget as HTMLElement).style.transform='translateY(-3px)'}
               onMouseLeave={e=>(e.currentTarget as HTMLElement).style.transform='translateY(0)'}>
               <div style={{ marginBottom: 10 }}><Icon/></div>
-              <h3 style={{ fontWeight: 800, color: 'var(--accent)', marginBottom: 6, fontSize: 16 }}>{title}</h3>
+              <h3 style={{ fontWeight: 800, color: 'var(--btn)', marginBottom: 6, fontSize: 16 }}>{title}</h3>
               <p style={{ color: 'var(--muted)', lineHeight: 1.65, fontSize: 13 }}>{desc}</p>
             </div>
           ))}
@@ -183,7 +182,7 @@ export default function HomePage() {
             {(['beginner','intermediate','expert'] as const).map(d => (
               <div key={d} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px', textAlign: 'center' }}>
                 <div style={{ fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', fontWeight: 700, letterSpacing: 0.5 }}>{d}</div>
-                <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--accent)', marginTop: 4 }}>
+                <div style={{ fontSize: 20, fontWeight: 900, color: 'var(--btn)', marginTop: 4 }}>
                   {stats[d].bestTime ? formatTime(stats[d].bestTime!) : '—'}
                 </div>
               </div>
@@ -192,17 +191,29 @@ export default function HomePage() {
         </section>
       )}
 
-      {/* Pro teaser */}
-      <section style={{ background: 'var(--bg2)', borderTop: '1px solid var(--border)', padding: '44px 24px', textAlign: 'center' }}>
-        <p style={{ fontSize: 12, color: 'var(--muted)', fontWeight: 700, textTransform: 'uppercase', letterSpacing: 1, marginBottom: 6 }}>Coming soon</p>
-        <h2 style={{ fontSize: 22, fontWeight: 900, marginBottom: 8 }}>MinesweeperPro</h2>
-        <p style={{ color: 'var(--muted)', maxWidth: 420, margin: '0 auto 20px', lineHeight: 1.65, fontSize: 14 }}>
-          Custom board themes, advanced AI analysis, leaderboard highlights, and no ads.
+      {/* Pro */}
+      <section style={{
+        background: 'var(--bg2)', borderTop: '1px solid var(--border)',
+        padding: '52px 24px', textAlign: 'center',
+      }}>
+        <div style={{ display: 'inline-block', background: 'var(--btn)', color: '#fff', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', padding: '4px 12px', borderRadius: 20, marginBottom: 14 }}>Coming soon</div>
+        <h2 style={{ fontSize: 26, fontWeight: 900, marginBottom: 10 }}>MinesweeperPro</h2>
+        <p style={{ color: 'var(--muted)', maxWidth: 440, margin: '0 auto 24px', lineHeight: 1.7, fontSize: 15 }}>
+          Custom board themes, advanced AI analysis, leaderboard highlights — the full experience.
         </p>
-        <button onClick={() => alert('Coming soon! Stay tuned.')} style={{
-          background: 'var(--accent)', color: '#fff', padding: '11px 28px',
-          borderRadius: 10, fontWeight: 700, fontSize: 14,
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
+          {['Custom themes','Advanced AI','Global leaderboard','No ads'].map(f => (
+            <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)', fontWeight: 600 }}>
+              <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }}/>
+              {f}
+            </div>
+          ))}
+        </div>
+        <button onClick={() => alert('Coming soon!')} style={{
+          background: 'var(--btn)', color: '#fff', padding: '12px 32px',
+          borderRadius: 10, fontWeight: 700, fontSize: 15,
           border: 'none', cursor: 'pointer',
+          boxShadow: '0 4px 16px var(--btn-shadow)',
         }}>
           Join the waitlist
         </button>

@@ -53,16 +53,18 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
             <Link key={href} href={href} style={{
               padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 600,
               textDecoration: 'none', transition: 'all 0.15s',
-              color: active ? 'var(--accent)' : 'var(--muted)',
-              background: active ? 'rgba(255,77,109,0.09)' : 'transparent',
+              color: active ? 'var(--btn)' : 'var(--muted)',
+              background: active ? 'rgba(201,24,74,0.09)' : 'transparent',
             }}>{label}</Link>
           );
         })}
         <Link href="/signin" style={{
-          padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700,
-          textDecoration: 'none', transition: 'all 0.15s',
-          color: '#fff', background: 'var(--accent)',
-          marginLeft: 4,
+          padding: '6px 16px', borderRadius: 8, fontSize: 14, fontWeight: 700,
+          textDecoration: 'none',
+          color: '#fff',
+          background: 'var(--btn)',
+          marginLeft: 6,
+          boxShadow: '0 2px 8px var(--btn-shadow)',
         }}>Sign in</Link>
         <button onClick={onToggleTheme} style={{
           marginLeft: 6, width: 34, height: 34, borderRadius: 8,
