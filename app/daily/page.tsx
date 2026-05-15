@@ -94,7 +94,7 @@ export default function DailyPage() {
 
   const toggle = () => { const n=!isDark; setIsDark(n); document.documentElement.classList.toggle('dark',n); localStorage.setItem('theme',n?'dark':'light'); };
   const handleToggleAI = () => { setShowAI(v => !v); setHinted(null); setUsedHints(true); };
-  const handleHint = (cell: [number,number]) => { setHinted(cell); setUsedHints(true); };
+  const handleHint = (cell: [number,number] | null) => { setHinted(cell); if (cell) setUsedHints(true); };
 
   const boardW = CFG.cols * sz + (CFG.cols - 1) * BOARD_GAP + 8;
 
