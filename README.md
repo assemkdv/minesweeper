@@ -2,7 +2,7 @@
 
 **Play here:** https://minesweeper-omega-ten.vercel.app/
 
-Mineko is a Minesweeper web app built with Next.js. It started as a class project and grew into a full product with an AI coach, daily challenges, a real leaderboard, accounts, and a clean mobile-friendly design.
+Mineko is a Minesweeper web app built for the nFactorial Incubator. It grew into a full product with an AI coach, daily challenges, a real leaderboard, accounts, and a clean mobile-friendly design.
 
 ## Features
 
