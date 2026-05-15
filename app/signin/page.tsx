@@ -74,7 +74,6 @@ export default function SignInPage() {
           {mode === 'signin' ? 'Sign in to save your stats and streaks.' : 'Create an account to track your progress.'}
         </p>
 
-        {/* Mode toggle */}
         <div style={{
           display: 'flex', background: 'var(--bg2)',
           border: '1px solid var(--border)',
@@ -97,11 +96,8 @@ export default function SignInPage() {
           <div>
             <label htmlFor="email" style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Email</label>
             <input
-              id="email"
-              name="email"
-              type="email"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
+              id="email" name="email" type="email"
+              value={email} onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
               autoComplete="email"
               style={{
@@ -118,11 +114,9 @@ export default function SignInPage() {
             <label htmlFor="password" style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Password</label>
             <div style={{ position: 'relative' }}>
               <input
-                id="password"
-                name="password"
+                id="password" name="password"
                 type={showPw ? 'text' : 'password'}
-                value={password}
-                onChange={e => setPassword(e.target.value)}
+                value={password} onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
                 autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                 style={{
@@ -157,7 +151,7 @@ export default function SignInPage() {
             cursor: loading ? 'not-allowed' : 'pointer',
             boxShadow: '0 4px 16px var(--btn-shadow)',
             marginTop: 4,
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
             {loading ? (
               <span style={{ display: 'inline-block', width: 18, height: 18, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}/>
@@ -183,10 +177,6 @@ export default function SignInPage() {
           onMouseLeave={e => (e.currentTarget as HTMLElement).style.borderColor = 'var(--border)'}>
           Continue as guest
         </Link>
-
-        <p style={{ marginTop: 20, fontSize: 11, color: 'var(--muted)', textAlign: 'center', lineHeight: 1.6 }}>
-          Stats are saved locally in your browser even without an account.
-        </p>
       </div>
 
       <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
