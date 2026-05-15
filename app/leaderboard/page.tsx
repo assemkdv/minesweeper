@@ -2,41 +2,9 @@
 import { useState, useEffect } from 'react';
 import { Navbar } from '@/components/Navbar';
 import { loadStats, formatTime } from '@/lib/storage';
+import { fetchTopScores, ScoreRow } from '@/lib/scores';
 
 type Tab = 'beginner'|'intermediate'|'expert'|'daily';
-const MOCK: Record<Tab, {rank:number;name:string;time:number;city:string;noHints?:boolean}[]> = {
-  beginner: [
-    {rank:1,name:'SpeedDemon_KZ',time:3210, city:'Almaty',   noHints:true},
-    {rank:2,name:'ProMiner99',   time:4520, city:'Astana'},
-    {rank:3,name:'QuickClick',   time:5100, city:'Shymkent', noHints:true},
-    {rank:4,name:'BombSquad',    time:5890, city:'Almaty'},
-    {rank:5,name:'MineHunter',   time:6230, city:'Karaganda',noHints:true},
-    {rank:6,name:'LogicMaster',  time:7100, city:'Almaty'},
-    {rank:7,name:'GridMaster',   time:8200, city:'Atyrau'},
-    {rank:8,name:'CellReveal',   time:9100, city:'Semey'},
-  ],
-  intermediate: [
-    {rank:1,name:'ExpertPlayer',    time:25400,city:'Almaty',   noHints:true},
-    {rank:2,name:'IntermediatePro', time:31200,city:'Astana'},
-    {rank:3,name:'BoardClearer',    time:38900,city:'Shymkent'},
-    {rank:4,name:'FlagMaster',      time:42100,city:'Almaty',   noHints:true},
-    {rank:5,name:'MidLevelKing',    time:49000,city:'Karaganda'},
-  ],
-  expert: [
-    {rank:1,name:'GrandMaster',  time:45200, city:'Almaty',   noHints:true},
-    {rank:2,name:'MineGod',      time:62300, city:'Astana'},
-    {rank:3,name:'SpeedSweeper', time:78100, city:'Almaty',   noHints:true},
-    {rank:4,name:'ProSweeper',   time:95000, city:'Shymkent'},
-    {rank:5,name:'ExpertElite',  time:112000,city:'Karaganda'},
-  ],
-  daily: [
-    {rank:1,name:'DailyChamp',     time:32100,city:'Almaty',   noHints:true},
-    {rank:2,name:'StreakKing',      time:38400,city:'Astana'},
-    {rank:3,name:'MorningMiner',   time:44200,city:'Shymkent', noHints:true},
-    {rank:4,name:'DailyGrinder',   time:52000,city:'Almaty'},
-    {rank:5,name:'EverydayPlayer', time:61100,city:'Karaganda'},
-  ],
-};
 
 function NoHintsBadge() {
   return (
@@ -79,10 +47,12 @@ function TrophyBig() {
 }
 
 export default function LeaderboardPage() {
-  const [isDark, setIsDark]     = useState(false);
-  const [tab, setTab]           = useState<Tab>('beginner');
-  const [localBest, setLocalBest]       = useState<number|null>(null);
-  const [localNoHints, setLocalNoHints] = useState<boolean|null>(null);
+  const [isDark, setIsDark]               = useState(false);
+  const [tab, setTab]                     = useState<Tab>('beginner');
+  const [rows, setRows]                   = useState<ScoreRow[]>([]);
+  const [loading, setLoading]             = useState(false);
+  const [localBest, setLocalBest]         = useState<number|null>(null);
+  const [localNoHints, setLocalNoHints]   = useState<boolean|null>(null);
 
   useEffect(() => {
     const s = localStorage.getItem('theme');
@@ -90,6 +60,7 @@ export default function LeaderboardPage() {
     setIsDark(dark);
     document.documentElement.classList.toggle('dark', dark);
   }, []);
+
   useEffect(() => {
     const s = loadStats();
     if (tab === 'daily') {
@@ -99,7 +70,13 @@ export default function LeaderboardPage() {
       setLocalBest(s[tab as 'beginner'|'intermediate'|'expert']?.bestTime ?? null);
       setLocalNoHints(null);
     }
+    setLoading(true);
+    fetchTopScores(tab).then(data => {
+      setRows(data);
+      setLoading(false);
+    });
   }, [tab]);
+
   const toggle = () => { const n=!isDark; setIsDark(n); document.documentElement.classList.toggle('dark',n); localStorage.setItem('theme',n?'dark':'light'); };
 
   const tabs: { key: Tab; label: string }[] = [
@@ -154,29 +131,43 @@ export default function LeaderboardPage() {
 
         <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, overflow: 'hidden' }}>
           <div style={{
-            display: 'grid', gridTemplateColumns: '48px 1fr 90px 110px',
+            display: 'grid', gridTemplateColumns: '48px 1fr 90px',
             padding: '9px 16px', background: 'var(--bg2)', borderBottom: '1px solid var(--border)',
           }}>
-            {['#','Player','Time','City'].map(h => (
+            {['#','Player','Time'].map(h => (
               <div key={h} style={{ fontSize: 11, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5 }}>{h}</div>
             ))}
           </div>
-          {MOCK[tab].map((e, i) => (
-            <div key={i} style={{
-              display: 'grid', gridTemplateColumns: '48px 1fr 90px 110px',
+
+          {loading && (
+            <div style={{ padding: '32px 16px', textAlign: 'center', color: 'var(--muted)', fontSize: 14 }}>
+              Loading...
+            </div>
+          )}
+
+          {!loading && rows.length === 0 && (
+            <div style={{ padding: '40px 16px', textAlign: 'center' }}>
+              <div style={{ fontSize: 32, marginBottom: 8 }}>🏆</div>
+              <div style={{ fontWeight: 700, color: 'var(--text)', fontSize: 15, marginBottom: 4 }}>No scores yet</div>
+              <div style={{ color: 'var(--muted)', fontSize: 13 }}>Be the first to set a record!</div>
+            </div>
+          )}
+
+          {!loading && rows.map((e, i) => (
+            <div key={e.id} style={{
+              display: 'grid', gridTemplateColumns: '48px 1fr 90px',
               padding: '13px 16px',
-              borderBottom: i < MOCK[tab].length-1 ? '1px solid var(--border)' : 'none',
+              borderBottom: i < rows.length-1 ? '1px solid var(--border)' : 'none',
               alignItems: 'center', transition: 'background 0.1s', cursor: 'default',
             }}
               onMouseEnter={el => el.currentTarget.style.background = 'rgba(255,77,109,0.04)'}
               onMouseLeave={el => el.currentTarget.style.background = 'transparent'}>
-              <div style={{ display: 'flex', alignItems: 'center' }}><MedalIcon rank={e.rank}/></div>
+              <div style={{ display: 'flex', alignItems: 'center' }}><MedalIcon rank={i+1}/></div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' }}>
-                <span style={{ fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>{e.name}</span>
-                {e.noHints && <NoHintsBadge/>}
+                <span style={{ fontWeight: 600, color: 'var(--text)', fontSize: 14 }}>{e.username}</span>
+                {e.no_hints && <NoHintsBadge/>}
               </div>
-              <div style={{ fontWeight: 800, color: 'var(--btn)', fontSize: 14 }}>{formatTime(e.time)}</div>
-              <div style={{ fontSize: 13, color: 'var(--muted)' }}>{e.city}</div>
+              <div style={{ fontWeight: 800, color: 'var(--btn)', fontSize: 14 }}>{formatTime(e.time_ms)}</div>
             </div>
           ))}
         </div>

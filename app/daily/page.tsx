@@ -4,6 +4,8 @@ import { useGame } from '@/hooks/useGame';
 import { useTimer } from '@/hooks/useTimer';
 import { getDailySeed, analyzeBoard, DIFFICULTIES } from '@/lib/minesweeper';
 import { recordDaily, loadStats, formatTime, todayAlreadyPlayed } from '@/lib/storage';
+import { submitScore, getOrCreateGuestName } from '@/lib/scores';
+import { supabase } from '@/lib/supabase';
 import { Board, BOARD_GAP } from '@/components/game/Board';
 import { GameHeader } from '@/components/game/GameHeader';
 import { AICoach } from '@/components/game/AICoach';
@@ -48,6 +50,7 @@ export default function DailyPage() {
   const [appStats, setAppStats]   = useState(() => loadStats());
   const [overlay, setOverlay]     = useState<'won'|'lost'|null>(null);
   const [alreadyPlayed, setAlreadyPlayed] = useState<{ result: 'won'|'lost'|null; timeMs: number|null; usedHints: boolean|null } | null>(null);
+  const [username, setUsername]   = useState<string | null>(null);
 
   const game = useGame('intermediate', seed);
   const { elapsed, display } = useTimer(game.status, game.startTime, game.endTime);
@@ -65,6 +68,14 @@ export default function DailyPage() {
     const prev = todayAlreadyPlayed();
     if (prev.played) setAlreadyPlayed(prev);
 
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.email) {
+        setUsername(data.user.email.split('@')[0]);
+      } else {
+        setUsername(getOrCreateGuestName());
+      }
+    });
+
     return () => window.removeEventListener('resize', calc);
   }, []);
   useEffect(() => { const t = setInterval(() => setCd(cd()), 1000); return () => clearInterval(t); }, []);
@@ -74,6 +85,9 @@ export default function DailyPage() {
       const stats = recordDaily(game.status === 'won', elapsed, usedHints);
       setAppStats(stats);
       setAlreadyPlayed({ result: game.status, timeMs: elapsed, usedHints });
+      if (game.status === 'won' && username) {
+        submitScore({ username, difficulty: 'daily', timeMs: elapsed, noHints: !usedHints });
+      }
       setTimeout(() => setOverlay(game.status as 'won'|'lost'), 250);
     }
   }, [game.status]);
