@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CatMascot } from '@/components/CatMascot';
+import { supabase } from '@/lib/supabase';
 
 function EyeIcon({ open }: { open: boolean }) {
   return open ? (
@@ -19,6 +20,15 @@ function EyeIcon({ open }: { open: boolean }) {
   );
 }
 
+function friendlyError(msg: string): string {
+  if (msg.includes('already registered') || msg.includes('already been registered')) return 'An account with this email already exists.';
+  if (msg.includes('Invalid login credentials') || msg.includes('invalid_credentials')) return 'Wrong email or password.';
+  if (msg.includes('Email not confirmed')) return 'Please confirm your email first — check your inbox.';
+  if (msg.includes('Password should be')) return 'Password must be at least 6 characters.';
+  if (msg.includes('Unable to validate email')) return 'Please enter a valid email address.';
+  return 'Something went wrong. Please try again.';
+}
+
 export default function SignInPage() {
   const router = useRouter();
   const [mode, setMode]         = useState<'signin'|'signup'>('signin');
@@ -26,13 +36,27 @@ export default function SignInPage() {
   const [password, setPassword] = useState('');
   const [showPw, setShowPw]     = useState(false);
   const [loading, setLoading]   = useState(false);
+  const [error, setError]       = useState('');
+  const [success, setSuccess]   = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!email || !password) return;
+    setError('');
+    setSuccess('');
+    if (!email || !password) { setError('Please fill in all fields.'); return; }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 700));
-    router.push('/game');
+
+    if (mode === 'signup') {
+      const { error: err } = await supabase.auth.signUp({ email, password });
+      if (err) { setError(friendlyError(err.message)); setLoading(false); return; }
+      setSuccess('Account created! Check your email to confirm, then sign in.');
+      setMode('signin');
+      setLoading(false);
+    } else {
+      const { error: err } = await supabase.auth.signInWithPassword({ email, password });
+      if (err) { setError(friendlyError(err.message)); setLoading(false); return; }
+      router.push('/game');
+    }
   };
 
   return (
@@ -78,7 +102,7 @@ export default function SignInPage() {
           borderRadius: 10, padding: 4, marginBottom: 24, width: '100%',
         }}>
           {(['signin','signup'] as const).map(m => (
-            <button key={m} onClick={() => setMode(m)} style={{
+            <button key={m} onClick={() => { setMode(m); setError(''); setSuccess(''); }} style={{
               flex: 1, padding: '8px', borderRadius: 7, border: 'none',
               fontWeight: 700, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s',
               background: mode === m ? 'var(--btn)' : 'transparent',
@@ -133,6 +157,17 @@ export default function SignInPage() {
               </button>
             </div>
           </div>
+
+          {error && (
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, padding: '9px 12px', fontSize: 13, color: 'var(--btn)', fontWeight: 500 }}>
+              {error}
+            </div>
+          )}
+          {success && (
+            <div style={{ background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, padding: '9px 12px', fontSize: 13, color: '#166534', fontWeight: 500 }}>
+              {success}
+            </div>
+          )}
 
           <button type="submit" disabled={loading} style={{
             background: loading ? 'var(--accent)' : 'var(--btn)',
