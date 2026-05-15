@@ -220,7 +220,7 @@ export default function HomePage() {
       </section>
 
       <footer style={{ textAlign: 'center', padding: '20px', color: 'var(--muted)', fontSize: 13, borderTop: '1px solid var(--border)' }}>
-        MinesweeperPro &copy; 2025
+        MinesweeperPro &copy; 2026
       </footer>
     </div>
   );
