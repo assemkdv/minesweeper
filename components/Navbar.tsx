@@ -37,6 +37,7 @@ function StarIcon() {
 export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: () => void }) {
   const p = usePathname();
   const links = [
+    { href: '/',            label: 'Home' },
     { href: '/game',        label: 'Play' },
     { href: '/daily',       label: 'Daily' },
     { href: '/leaderboard', label: 'Scores' },
@@ -59,7 +60,7 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         {links.map(({ href, label }) => {
-          const active = p === href || p?.startsWith(href);
+          const active = href === '/' ? p === '/' : (p === href || p?.startsWith(href));
           return (
             <Link key={href} href={href} style={{
               padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 600,
@@ -70,7 +71,6 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
           );
         })}
 
-        {/* Pro badge link */}
         <Link href="/pro" style={{
           display: 'inline-flex', alignItems: 'center', gap: 4,
           padding: '5px 12px', borderRadius: 20, fontSize: 13, fontWeight: 800,
