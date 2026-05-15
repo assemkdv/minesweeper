@@ -1,73 +1,51 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
-
-* { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:      #fff5f7;
-  --bg2:     #ffe0eb;
-  --card:    #ffffff;
-  --border:  #ffc2d1;
-  --text:    #3d1520;
-  --muted:   #9a4060;
-  --accent:  #ff4d6d;
-  --btn:     #c9184a;
+  --bg: #fff5f7;
+  --bg2: #ffe0eb;
+  --card: #ffffff;
+  --border: #ffc2d1;
+  --text: #3d1520;
+  --muted: #9a4060;
+  --accent: #ff4d6d;
+  --btn: #c9184a;
   --btn-shadow: rgba(201,24,74,0.35);
 }
-
 .dark {
-  --bg:      #16070d;
-  --bg2:     #200e16;
-  --card:    #2a1220;
-  --border:  #4a2535;
-  --text:    #fce4ec;
-  --muted:   #c07090;
-  --accent:  #ff4d6d;
-  --btn:     #e8185a;
+  --bg: #16070d;
+  --bg2: #200e16;
+  --card: #2a1220;
+  --border: #4a2535;
+  --text: #fce4ec;
+  --muted: #c07090;
+  --accent: #ff4d6d;
+  --btn: #e8185a;
   --btn-shadow: rgba(232,24,90,0.4);
 }
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: var(--font-outfit), sans-serif; background: var(--bg); color: var(--text); }
 
-html, body {
-  min-height: 100vh;
-  background: var(--bg);
-  color: var(--text);
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  transition: background 0.2s, color 0.2s;
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-8px); }
 }
-
 @keyframes pop {
-  0%   { transform: scale(0.5); opacity: 0; }
-  65%  { transform: scale(1.12); }
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.1); }
   100% { transform: scale(1); opacity: 1; }
 }
-@keyframes shake {
-  0%,100% { transform: translateX(0); }
-  20%     { transform: translateX(-5px); }
-  40%     { transform: translateX(5px); }
-  60%     { transform: translateX(-3px); }
-  80%     { transform: translateX(3px); }
+@keyframes fadeup {
+  from { opacity: 0; transform: translateY(12px); }
+  to { opacity: 1; transform: translateY(0); }
 }
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(10px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.1); }
 }
-@keyframes wiggle {
-  0%,100% { transform: rotate(0deg); }
-  25%     { transform: rotate(-8deg); }
-  75%     { transform: rotate(8deg); }
-}
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-8px); }
-}
+.anim-float { animation: float 3s ease-in-out infinite; }
+.anim-pop   { animation: pop 0.4s cubic-bezier(.34,1.56,.64,1) forwards; }
+.anim-fadeup { animation: fadeup 0.3s ease forwards; }
 
-.anim-pop    { animation: pop    0.3s cubic-bezier(0.34,1.56,0.64,1) forwards; }
-.anim-shake  { animation: shake  0.45s ease-in-out; }
-.anim-fadeup { animation: fadeUp 0.35s ease-out forwards; }
-.anim-wiggle { animation: wiggle 0.4s ease-in-out; }
-.anim-float  { animation: float  3s ease-in-out infinite; }
-
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+/* Mobile layout helpers */
+@media (max-width: 600px) {
+  .hero-btns { flex-direction: column; align-items: stretch; }
+  .hero-btns a { text-align: center; }
+}
