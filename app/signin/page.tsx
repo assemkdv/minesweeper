@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { CatMascot } from '@/components/CatMascot';
 
@@ -19,22 +20,19 @@ function EyeIcon({ open }: { open: boolean }) {
 }
 
 export default function SignInPage() {
+  const router = useRouter();
   const [mode, setMode]         = useState<'signin'|'signup'>('signin');
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [showPw, setShowPw]     = useState(false);
   const [loading, setLoading]   = useState(false);
-  const [error, setError]       = useState('');
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setError('');
-    if (!email || !password) { setError('Please fill in all fields.'); return; }
-    if (password.length < 6)  { setError('Password must be at least 6 characters.'); return; }
+    if (!email || !password) return;
     setLoading(true);
-    await new Promise(r => setTimeout(r, 900));
-    setLoading(false);
-    setError('Auth coming soon! Connect Supabase to enable real sign-in.');
+    await new Promise(r => setTimeout(r, 700));
+    router.push('/game');
   };
 
   return (
@@ -80,7 +78,7 @@ export default function SignInPage() {
           borderRadius: 10, padding: 4, marginBottom: 24, width: '100%',
         }}>
           {(['signin','signup'] as const).map(m => (
-            <button key={m} onClick={() => { setMode(m); setError(''); }} style={{
+            <button key={m} onClick={() => setMode(m)} style={{
               flex: 1, padding: '8px', borderRadius: 7, border: 'none',
               fontWeight: 700, fontSize: 13, cursor: 'pointer', transition: 'all 0.15s',
               background: mode === m ? 'var(--btn)' : 'transparent',
@@ -136,14 +134,6 @@ export default function SignInPage() {
             </div>
           </div>
 
-          {error && (
-            <div style={{
-              background: 'var(--bg2)', border: '1px solid var(--border)',
-              borderRadius: 8, padding: '9px 12px',
-              fontSize: 13, color: 'var(--btn)', fontWeight: 500,
-            }}>{error}</div>
-          )}
-
           <button type="submit" disabled={loading} style={{
             background: loading ? 'var(--accent)' : 'var(--btn)',
             color: '#fff', border: 'none', borderRadius: 10, padding: '13px',
@@ -153,11 +143,10 @@ export default function SignInPage() {
             marginTop: 4,
             display: 'flex', alignItems: 'center', justifyContent: 'center',
           }}>
-            {loading ? (
-              <span style={{ display: 'inline-block', width: 18, height: 18, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}/>
-            ) : (
-              mode === 'signin' ? 'Sign in' : 'Create account'
-            )}
+            {loading
+              ? <span style={{ display: 'inline-block', width: 18, height: 18, border: '2px solid rgba(255,255,255,0.4)', borderTopColor: '#fff', borderRadius: '50%', animation: 'spin 0.8s linear infinite' }}/>
+              : mode === 'signin' ? 'Sign in' : 'Create account'
+            }
           </button>
         </form>
 
