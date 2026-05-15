@@ -95,11 +95,15 @@ export default function SignInPage() {
 
         <form onSubmit={handleSubmit} style={{ width: '100%', display: 'flex', flexDirection: 'column', gap: 14 }}>
           <div>
-            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Email</label>
+            <label htmlFor="email" style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Email</label>
             <input
-              type="email" value={email}
+              id="email"
+              name="email"
+              type="email"
+              value={email}
               onChange={e => setEmail(e.target.value)}
               placeholder="you@example.com"
+              autoComplete="email"
               style={{
                 width: '100%', padding: '11px 14px', borderRadius: 10, fontSize: 14,
                 border: '1.5px solid var(--border)', background: 'var(--bg)',
@@ -111,13 +115,16 @@ export default function SignInPage() {
           </div>
 
           <div>
-            <label style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Password</label>
+            <label htmlFor="password" style={{ fontSize: 12, fontWeight: 700, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: 0.5, display: 'block', marginBottom: 6 }}>Password</label>
             <div style={{ position: 'relative' }}>
               <input
+                id="password"
+                name="password"
                 type={showPw ? 'text' : 'password'}
                 value={password}
                 onChange={e => setPassword(e.target.value)}
                 placeholder="••••••••"
+                autoComplete={mode === 'signup' ? 'new-password' : 'current-password'}
                 style={{
                   width: '100%', padding: '11px 42px 11px 14px', borderRadius: 10, fontSize: 14,
                   border: '1.5px solid var(--border)', background: 'var(--bg)',
