@@ -59,6 +59,12 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
             }}>{label}</Link>
           );
         })}
+        <Link href="/pro" style={{
+          padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700,
+          textDecoration: 'none', transition: 'all 0.15s',
+          color: p === '/pro' ? 'var(--btn)' : 'var(--muted)',
+          background: p === '/pro' ? 'rgba(201,24,74,0.09)' : 'transparent',
+        }}>Pro</Link>
         <Link href="/signin" style={{
           padding: '6px 16px', borderRadius: 8, fontSize: 14, fontWeight: 700,
           textDecoration: 'none', color: '#fff',
