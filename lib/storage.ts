@@ -14,9 +14,12 @@ export interface AppStats {
   lastDailyDate: string | null;
   dailyBestTime: number | null;
   dailyLastUsedHints: boolean | null;
+  dailyCompletedDate: string | null;
+  dailyCompletedResult: 'won' | 'lost' | null;
+  dailyCompletedTime: number | null;
 }
 const DEFAULT: DifficultyStats = { gamesPlayed: 0, wins: 0, bestTime: null, currentStreak: 0, bestStreak: 0, totalTime: 0 };
-const DEFAULT_STATS: AppStats = { beginner: {...DEFAULT}, intermediate: {...DEFAULT}, expert: {...DEFAULT}, dailyStreak: 0, lastDailyDate: null, dailyBestTime: null, dailyLastUsedHints: null };
+const DEFAULT_STATS: AppStats = { beginner: {...DEFAULT}, intermediate: {...DEFAULT}, expert: {...DEFAULT}, dailyStreak: 0, lastDailyDate: null, dailyBestTime: null, dailyLastUsedHints: null, dailyCompletedDate: null, dailyCompletedResult: null, dailyCompletedTime: null };
 const KEY = 'msp_stats_v1';
 export function loadStats(): AppStats {
   if (typeof window === 'undefined') return DEFAULT_STATS;
@@ -45,7 +48,18 @@ export function recordDaily(won: boolean, timeMs: number, usedHints: boolean): A
     if (s.dailyBestTime === null || timeMs < s.dailyBestTime) s.dailyBestTime = timeMs;
   }
   s.dailyLastUsedHints = usedHints;
+  s.dailyCompletedDate = today;
+  s.dailyCompletedResult = won ? 'won' : 'lost';
+  s.dailyCompletedTime = timeMs;
   saveStats(s); return s;
+}
+export function todayAlreadyPlayed(): { played: boolean; result: 'won'|'lost'|null; timeMs: number|null; usedHints: boolean|null } {
+  const s = loadStats();
+  const today = new Date().toISOString().split('T')[0];
+  if (s.dailyCompletedDate === today) {
+    return { played: true, result: s.dailyCompletedResult, timeMs: s.dailyCompletedTime, usedHints: s.dailyLastUsedHints };
+  }
+  return { played: false, result: null, timeMs: null, usedHints: null };
 }
 export function formatTime(ms: number): string {
   const s = Math.floor(ms / 1000), m = Math.floor(s / 60), sec = s % 60, msec = Math.floor((ms % 1000) / 10);
