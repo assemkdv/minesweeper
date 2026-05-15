@@ -4,6 +4,8 @@ import { useGame } from '@/hooks/useGame';
 import { useTimer } from '@/hooks/useTimer';
 import { analyzeBoard, Difficulty, DIFFICULTIES } from '@/lib/minesweeper';
 import { recordGame, loadStats } from '@/lib/storage';
+import { submitScore, getOrCreateGuestName } from '@/lib/scores';
+import { supabase } from '@/lib/supabase';
 import { Board, BOARD_GAP } from '@/components/game/Board';
 import { GameHeader } from '@/components/game/GameHeader';
 import { AICoach } from '@/components/game/AICoach';
@@ -29,6 +31,7 @@ export default function GamePage() {
   const [appStats, setAppStats] = useState(() => loadStats());
   const [saved, setSaved]       = useState(false);
   const [overlay, setOverlay]   = useState<'won'|'lost'|null>(null);
+  const [username, setUsername] = useState<string | null>(null);
 
   const game = useGame(diff);
   const { elapsed, display } = useTimer(game.status, game.startTime, game.endTime);
@@ -37,11 +40,18 @@ export default function GamePage() {
   const boardW = cfg.cols * sz + (cfg.cols - 1) * BOARD_GAP + 8;
 
   useEffect(() => {
-    const saved = localStorage.getItem('theme');
-    const dark = saved === 'dark';
+    const s = localStorage.getItem('theme');
+    const dark = s === 'dark';
     setIsDark(dark);
     document.documentElement.classList.toggle('dark', dark);
     setSz(calcSize(cfg.rows, cfg.cols));
+    supabase.auth.getUser().then(({ data }) => {
+      if (data.user?.email) {
+        setUsername(data.user.email.split('@')[0]);
+      } else {
+        setUsername(getOrCreateGuestName());
+      }
+    });
   }, [diff]);
   useEffect(() => {
     const fn = () => setSz(calcSize(cfg.rows, cfg.cols));
@@ -52,6 +62,9 @@ export default function GamePage() {
     if ((game.status === 'won' || game.status === 'lost') && !saved) {
       setSaved(true);
       setAppStats(recordGame(diff, game.status === 'won', elapsed));
+      if (game.status === 'won' && username) {
+        submitScore({ username, difficulty: diff, timeMs: elapsed, noHints: false });
+      }
       setTimeout(() => setOverlay(game.status as 'won'|'lost'), 250);
     }
     if (game.status === 'idle') { setSaved(false); setOverlay(null); }
