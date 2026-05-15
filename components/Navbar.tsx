@@ -25,6 +25,15 @@ function MoonIcon() {
   );
 }
 
+function StarIcon() {
+  return (
+    <svg width="11" height="11" viewBox="0 0 11 11" fill="none" style={{ flexShrink: 0 }}>
+      <path d="M5.5 1l1.1 2.7L9.5 4l-2 2 .5 3-2.5-1.5L3 9l.5-3-2-2 2.9-.3L5.5 1z"
+        fill="currentColor"/>
+    </svg>
+  );
+}
+
 export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: () => void }) {
   const p = usePathname();
   const links = [
@@ -32,6 +41,7 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
     { href: '/daily',       label: 'Daily' },
     { href: '/leaderboard', label: 'Scores' },
   ];
+  const proActive = p === '/pro';
   return (
     <nav style={{
       background: 'var(--card)', borderBottom: '1px solid var(--border)',
@@ -59,12 +69,25 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
             }}>{label}</Link>
           );
         })}
+
+        {/* Pro badge link */}
         <Link href="/pro" style={{
-          padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 700,
-          textDecoration: 'none', transition: 'all 0.15s',
-          color: p === '/pro' ? 'var(--btn)' : 'var(--muted)',
-          background: p === '/pro' ? 'rgba(201,24,74,0.09)' : 'transparent',
-        }}>Pro</Link>
+          display: 'inline-flex', alignItems: 'center', gap: 4,
+          padding: '5px 12px', borderRadius: 20, fontSize: 13, fontWeight: 800,
+          textDecoration: 'none', marginLeft: 2,
+          background: proActive
+            ? 'linear-gradient(135deg, #ff4d6d 0%, #ff9a3c 100%)'
+            : 'linear-gradient(135deg, rgba(255,77,109,0.12) 0%, rgba(255,154,60,0.12) 100%)',
+          border: '1.5px solid',
+          borderColor: proActive ? 'transparent' : 'rgba(255,77,109,0.3)',
+          color: proActive ? '#fff' : '#e8185a',
+          boxShadow: proActive ? '0 2px 10px rgba(255,77,109,0.35)' : 'none',
+          transition: 'all 0.15s',
+        }}>
+          <StarIcon/>
+          Pro
+        </Link>
+
         <Link href="/signin" style={{
           padding: '6px 16px', borderRadius: 8, fontSize: 14, fontWeight: 700,
           textDecoration: 'none', color: '#fff',
