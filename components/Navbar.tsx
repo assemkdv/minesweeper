@@ -37,9 +37,10 @@ function StarIcon() {
 export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleTheme: () => void }) {
   const p = usePathname();
   const links = [
-    { href: '/game',        label: 'Play' },
-    { href: '/daily',       label: 'Daily' },
-    { href: '/leaderboard', label: 'Scores' },
+    { href: '/',            label: 'Home',   exact: true },
+    { href: '/game',        label: 'Play',   exact: false },
+    { href: '/daily',       label: 'Daily',  exact: false },
+    { href: '/leaderboard', label: 'Scores', exact: false },
   ];
   const proActive = p === '/pro';
   return (
@@ -58,8 +59,8 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
         Mineko
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        {links.map(({ href, label }) => {
-          const active = p === href || p?.startsWith(href);
+        {links.map(({ href, label, exact }) => {
+          const active = exact ? p === href : (p === href || p?.startsWith(href));
           return (
             <Link key={href} href={href} style={{
               padding: '5px 14px', borderRadius: 8, fontSize: 14, fontWeight: 600,
@@ -70,7 +71,6 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
           );
         })}
 
-        {/* Pro badge link */}
         <Link href="/pro" style={{
           display: 'inline-flex', alignItems: 'center', gap: 4,
           padding: '5px 12px', borderRadius: 20, fontSize: 13, fontWeight: 800,
