@@ -197,11 +197,11 @@ export default function HomePage() {
         padding: '52px 24px', textAlign: 'center',
       }}>
         <div style={{ display: 'inline-block', background: 'var(--btn)', color: '#fff', fontSize: 11, fontWeight: 800, letterSpacing: 1, textTransform: 'uppercase', padding: '4px 12px', borderRadius: 20, marginBottom: 14 }}>Coming soon</div>
-        <h2 style={{ fontSize: 26, fontWeight: 900, marginBottom: 10 }}>MinesweeperPro</h2>
+        <h2 style={{ fontSize: 26, fontWeight: 900, marginBottom: 10 }}>Mineko Pro</h2>
         <p style={{ color: 'var(--muted)', maxWidth: 440, margin: '0 auto 24px', lineHeight: 1.7, fontSize: 15 }}>
           Custom board themes, advanced AI analysis, leaderboard highlights — the full experience.
         </p>
-        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
           {['Custom themes','Advanced AI','Global leaderboard','No ads'].map(f => (
             <div key={f} style={{ display: 'flex', alignItems: 'center', gap: 6, fontSize: 13, color: 'var(--muted)', fontWeight: 600 }}>
               <div style={{ width: 6, height: 6, borderRadius: '50%', background: 'var(--accent)' }}/>
@@ -220,7 +220,7 @@ export default function HomePage() {
       </section>
 
       <footer style={{ textAlign: 'center', padding: '20px', color: 'var(--muted)', fontSize: 13, borderTop: '1px solid var(--border)' }}>
-        MinesweeperPro &copy; 2026
+        Mineko &copy; 2026
       </footer>
     </div>
   );

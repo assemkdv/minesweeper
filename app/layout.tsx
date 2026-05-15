@@ -9,7 +9,7 @@ const outfit = Outfit({
 });
 
 export const metadata: Metadata = {
-  title: 'MinesweeperPro',
+  title: 'Mineko',
   description: 'Minesweeper with AI coach, daily challenges, and global leaderboard',
 };
 

@@ -40,11 +40,12 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
       position: 'sticky', top: 0, zIndex: 50,
     }}>
       <Link href="/" style={{
-        fontWeight: 800, fontSize: 17, color: 'var(--text)',
+        fontWeight: 900, fontSize: 20, color: 'var(--text)',
         textDecoration: 'none', display: 'flex', alignItems: 'center', gap: 8,
+        letterSpacing: -0.5,
       }}>
         <CatMascot mood="idle" size={34}/>
-        MinesweeperPro
+        Mineko
       </Link>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
         {links.map(({ href, label }) => {
@@ -60,10 +61,8 @@ export function Navbar({ isDark, onToggleTheme }: { isDark: boolean; onToggleThe
         })}
         <Link href="/signin" style={{
           padding: '6px 16px', borderRadius: 8, fontSize: 14, fontWeight: 700,
-          textDecoration: 'none',
-          color: '#fff',
-          background: 'var(--btn)',
-          marginLeft: 6,
+          textDecoration: 'none', color: '#fff',
+          background: 'var(--btn)', marginLeft: 6,
           boxShadow: '0 2px 8px var(--btn-shadow)',
         }}>Sign in</Link>
         <button onClick={onToggleTheme} style={{
