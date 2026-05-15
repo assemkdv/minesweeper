@@ -37,15 +37,16 @@ function GlobeIcon() {
 }
 
 export default function DailyPage() {
-  const [isDark, setIsDark]   = useState(false);
-  const [seed]                = useState(() => getDailySeed());
-  const [showAI, setShowAI]   = useState(false);
-  const [hinted, setHinted]   = useState<[number,number]|null>(null);
-  const [saved, setSaved]     = useState(false);
-  const [countdown, setCd]    = useState(cd);
-  const [sz, setSz]           = useState(26);
+  const [isDark, setIsDark]     = useState(false);
+  const [seed]                  = useState(() => getDailySeed());
+  const [showAI, setShowAI]     = useState(false);
+  const [hinted, setHinted]     = useState<[number,number]|null>(null);
+  const [usedHints, setUsedHints] = useState(false);
+  const [saved, setSaved]       = useState(false);
+  const [countdown, setCd]      = useState(cd);
+  const [sz, setSz]             = useState(26);
   const [appStats, setAppStats] = useState(() => loadStats());
-  const [overlay, setOverlay] = useState<'won'|'lost'|null>(null);
+  const [overlay, setOverlay]   = useState<'won'|'lost'|null>(null);
 
   const game = useGame('intermediate', seed);
   const { elapsed, display } = useTimer(game.status, game.startTime, game.endTime);
@@ -65,13 +66,22 @@ export default function DailyPage() {
   useEffect(() => {
     if ((game.status === 'won' || game.status === 'lost') && !saved) {
       setSaved(true);
-      setAppStats(recordDaily(game.status === 'won', elapsed));
+      setAppStats(recordDaily(game.status === 'won', elapsed, usedHints));
       setTimeout(() => setOverlay(game.status as 'won'|'lost'), 250);
     }
   }, [game.status]);
 
   const toggle = () => { const n=!isDark; setIsDark(n); document.documentElement.classList.toggle('dark',n); localStorage.setItem('theme',n?'dark':'light'); };
-  const handleReset = useCallback(() => { game.reset(); setHinted(null); setOverlay(null); setSaved(false); }, [game]);
+
+  const handleToggleAI = () => {
+    setShowAI(v => !v);
+    setHinted(null);
+    setUsedHints(true);
+  };
+  const handleHint = (cell: [number,number]) => {
+    setHinted(cell);
+    setUsedHints(true);
+  };
 
   const boardW = CFG.cols * sz + (CFG.cols - 1) * BOARD_GAP + 8;
 
@@ -80,7 +90,6 @@ export default function DailyPage() {
       <Navbar isDark={isDark} onToggleTheme={toggle}/>
       <main style={{ padding: '20px 16px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 16 }}>
 
-        {/* Daily header card */}
         <div style={{
           background: 'var(--card)', border: '1px solid var(--border)',
           borderRadius: 16, padding: '18px 24px', textAlign: 'center', maxWidth: 460, width: '100%',
@@ -104,7 +113,7 @@ export default function DailyPage() {
               position: 'relative',
             }}>
               <div style={{ width: boardW }}>
-                <GameHeader minesLeft={game.minesLeft} timerDisplay={display} status={game.status} onReset={handleReset} isDark={isDark}/>
+                <GameHeader minesLeft={game.minesLeft} timerDisplay={display} status={game.status} onReset={() => {}} isDark={isDark}/>
               </div>
               <Board
                 board={game.board} cellSize={sz}
@@ -119,29 +128,37 @@ export default function DailyPage() {
               {overlay && (
                 <div className="anim-fadeup" style={{
                   position: 'absolute', inset: 0, borderRadius: 16,
-                  background: 'rgba(61,21,32,0.75)', backdropFilter: 'blur(8px)',
+                  background: 'rgba(61,21,32,0.80)', backdropFilter: 'blur(8px)',
                   display: 'flex', flexDirection: 'column', alignItems: 'center',
-                  justifyContent: 'center', gap: 10,
+                  justifyContent: 'center', gap: 12, padding: 24,
                 }}>
                   <div className="anim-pop">
                     <CatMascot mood={overlay === 'won' ? 'won' : 'lost'} size={80}/>
                   </div>
-                  <div style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>
-                    {overlay === 'won' ? 'Daily complete!' : 'Try again!'}
-                  </div>
-                  {overlay === 'won' && (
+
+                  {overlay === 'won' ? (
                     <>
-                      <div style={{ color: '#ffc2d1', fontWeight: 600 }}>{display}s</div>
+                      <div style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>Daily complete!</div>
+                      <div style={{ color: '#ffc2d1', fontWeight: 700, fontSize: 18 }}>{display}</div>
                       <div style={{ color: '#ffc2d1', fontSize: 13, display: 'flex', alignItems: 'center', gap: 4 }}>
                         <FlameIcon/> {appStats.dailyStreak}-day streak
                       </div>
+                      {!usedHints && (
+                        <div style={{
+                          background: 'rgba(255,255,255,0.15)', border: '1px solid rgba(255,255,255,0.3)',
+                          borderRadius: 20, padding: '4px 12px', fontSize: 12, color: '#fff', fontWeight: 700,
+                        }}>No hints used</div>
+                      )}
+                      <div style={{ color: 'rgba(255,194,209,0.7)', fontSize: 12, marginTop: 4 }}>Come back tomorrow for a new puzzle</div>
+                    </>
+                  ) : (
+                    <>
+                      <div style={{ fontSize: 22, fontWeight: 900, color: '#fff' }}>Better luck tomorrow!</div>
+                      <div style={{ color: 'rgba(255,194,209,0.8)', fontSize: 13, textAlign: 'center' }}>
+                        Next puzzle in {countdown}
+                      </div>
                     </>
                   )}
-                  <button onClick={handleReset} style={{
-                    background: 'var(--accent)', color: '#fff', border: 'none',
-                    borderRadius: 10, padding: '10px 26px', fontSize: 14,
-                    fontWeight: 800, cursor: 'pointer', marginTop: 4,
-                  }}>Play again</button>
                 </div>
               )}
             </div>
@@ -152,8 +169,8 @@ export default function DailyPage() {
             <AICoach
               probMap={game.status === 'playing' ? probMap : null}
               showAI={showAI}
-              onToggle={() => { setShowAI(v=>!v); setHinted(null); }}
-              onHint={setHinted}
+              onToggle={handleToggleAI}
+              onHint={handleHint}
               isDark={isDark}
               gameActive={game.status === 'playing'}
             />
