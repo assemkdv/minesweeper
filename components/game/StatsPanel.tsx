@@ -1,13 +1,13 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { DifficultyStats, formatTime, getWinRate } from '@/lib/storage';
+import { AppStats, DifficultyStats, formatTime, getWinRate } from '@/lib/storage';
 import { Difficulty } from '@/lib/minesweeper';
 
-export function StatsPanel({ stats, difficulty, isDark }: { stats: Record<string,DifficultyStats>; difficulty: Difficulty; isDark: boolean }) {
+export function StatsPanel({ stats, difficulty, isDark }: { stats: AppStats; difficulty: Difficulty; isDark: boolean }) {
   const [mounted, setMounted] = useState(false);
   useEffect(() => { setMounted(true); }, []);
 
-  const d = stats[difficulty];
+  const d: DifficultyStats = stats[difficulty];
   if (!d || !mounted) return null;
 
   const items = [
