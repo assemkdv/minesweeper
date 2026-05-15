@@ -1,84 +1,46 @@
 # Mineko
 
-**Live site:** https://minesweeper-omega-ten.vercel.app/
+**Play here:** https://minesweeper-omega-ten.vercel.app/
 
-Mineko is a Minesweeper web app I built from scratch. It has an AI coach, daily challenges, a real leaderboard connected to a database, and a clean design that works on both desktop and mobile.
+Mineko is a Minesweeper web app built with Next.js. It started as a class project and grew into a full product with an AI coach, daily challenges, a real leaderboard, accounts, and a clean mobile-friendly design.
 
-## What's inside
+## Features
 
-**The game**
-- Three difficulty levels: Beginner, Intermediate, Expert
-- Your first click is always safe — mines are placed after you click
-- Right-click or long-press to flag a cell
-- Double-click to chord (auto-clear neighbors when mines are flagged)
+**Core game**
+- Beginner, Intermediate, and Expert difficulty
+- First click is always safe
+- Right-click or long-press to flag, double-click to chord
 
 **AI Coach**
-- Toggle it on and it overlays each hidden cell with its mine probability
-- Green = safe to click, yellow = risky, red = definitely a mine
-- It uses constraint-based logic — the same way experienced players think
-- Highlights the single best move if you want a hint
+- Shows the mine probability of every hidden cell in real time
+- Color-coded overlay: green = safe, yellow = risky, red = mine
+- Uses constraint-based logic, the same way experienced players think
+- Can highlight the single best move as a hint
 
 **Daily Challenge**
-- Same board for everyone in the world, every day
-- You can only play it once — no retrying after you finish
-- Tracks your streak across days
-- If you finish without using any hints, you get a "No hints" badge on the leaderboard
+- Same board for every player worldwide, resets at midnight UTC
+- One attempt per day — no retrying after you finish
+- Tracks your daily streak
+- "No hints" badge on the leaderboard if you finish without using the AI
 
 **Leaderboard**
-- Real scores saved to Supabase
-- Sorted by fastest time per difficulty
-- Shows "No hints" badge next to players who didn't use the AI
-- Your personal best is shown at the top
+- Real scores saved to a database
+- Ranked by fastest time per difficulty
+- Shows no-hints badge next to clean runs
 
 **Accounts**
-- Sign up / sign in with email via Supabase Auth
-- If you're not signed in, you get a guest username that's saved locally
+- Sign up and sign in with email
+- Scores are saved under your username
+- Guest players get an auto-generated name
 
 **Design**
-- Pink kawaii theme with a cat mascot (Mineko)
-- Dark mode that actually works
-- Mobile-friendly with a hamburger menu on small screens
-- Cat mascot changes expression based on the game state (idle, playing, won, lost)
+- Pink kawaii theme with a cat mascot
+- Dark mode
+- Mobile responsive with hamburger menu
+- Cat mascot reacts to game state (idle, playing, won, lost)
 
-**Mineko Pro** (work in progress)
-- Subscription page with monthly/yearly pricing
-- Skin vault with custom board themes
-- Stripe integration coming later
+## Stack
 
-## Tech stack
-
-- Next.js 14 (App Router) + TypeScript
-- Supabase for auth and the scores database
-- CSS variables for theming, inline styles throughout
-- localStorage for local stats (games played, win rate, streaks)
-- Deployed on Vercel
-
-## Running locally
-
-```bash
-npm install
-npm run dev
-```
-
-Create a `.env.local` file with your Supabase credentials:
-
-```
-NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
-```
-
-For the leaderboard to work you also need to create the scores table in Supabase SQL Editor:
-
-```sql
-create table if not exists public.scores (
-  id uuid default gen_random_uuid() primary key,
-  username text not null,
-  difficulty text not null check (difficulty in ('beginner','intermediate','expert','daily')),
-  time_ms integer not null,
-  no_hints boolean not null default false,
-  created_at timestamptz default now()
-);
-alter table scores enable row level security;
-create policy "Anyone can read scores" on scores for select to anon, authenticated using (true);
-create policy "Anyone can insert scores" on scores for insert to anon, authenticated with check (true);
-```
+- Next.js 14 + TypeScript
+- Supabase (auth + database)
+- Vercel (hosting)
